@@ -20,6 +20,27 @@ export default class King implements ModelType {
     }
     
     possibleMoves(positions: BoardPositionsType): [number, number][] {
-        return [[0, 2]]
+        const possibleMoves: [number, number][] = []
+        const [currentPosX, currentPosY] = this.currentPosition
+
+        const checkPosition = (x: number, y: number) => {      
+            if (positions[x]) {
+                const next = positions[x][y]
+                if (next === null || (next && next.type !== this.type)) {
+                    possibleMoves.push([x, y])
+                }
+            }
+        }
+
+        checkPosition(currentPosX+1, currentPosY+1)
+        checkPosition(currentPosX-1, currentPosY-1)
+        checkPosition(currentPosX+1, currentPosY-1)
+        checkPosition(currentPosX-1, currentPosY+1)
+        checkPosition(currentPosX, currentPosY+1)
+        checkPosition(currentPosX, currentPosY-1)
+        checkPosition(currentPosX+1, currentPosY)
+        checkPosition(currentPosX-1, currentPosY)
+
+        return possibleMoves
     }
 }

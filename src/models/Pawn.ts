@@ -24,10 +24,38 @@ export default class Pawn implements ModelType {
 
         const [currentPosX, currentPosY] = this.currentPosition
         
+        const checkPosition = (x: number, y: number) => {      
+            if (positions[x]) {
+                const next = positions[x][y]
+                const nextTopLeft = positions[x]?.[y-1]
+                const nextTopRight = positions[x]?.[y+1]
+
+                if (nextTopLeft && nextTopLeft.type !== this.type) {
+                    possibleMoves.push([x, y-1])
+                }
+
+                if (nextTopRight && nextTopRight.type !== this.type) {
+                    possibleMoves.push([x, y+1])
+                }
+
+                if (next === null) {
+                    possibleMoves.push([x, y])
+                }
+            }
+        }
+
         if (this.type === "white") {
-            possibleMoves.push([currentPosX+1, currentPosY])
+            checkPosition(currentPosX+1, currentPosY)
+            if (currentPosX === 1 && (positions[currentPosX+1][currentPosY] === null) && (positions[currentPosX+2][currentPosY] === null)) {
+                possibleMoves.push([currentPosX+2, currentPosY])
+            }
+
         } else {
-            possibleMoves.push([currentPosX-1, currentPosY])
+            checkPosition(currentPosX-1, currentPosY)
+            if (currentPosX === 6 && (positions[currentPosX-1][currentPosY] === null) && (positions[currentPosX-2][currentPosY] === null)) {
+                possibleMoves.push([currentPosX-2, currentPosY])
+            }
+
         }
 
         return possibleMoves

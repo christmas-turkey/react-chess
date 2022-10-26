@@ -53,5 +53,9 @@
 }
 
 .possible-move {
-    background-color: violet;
+    background-color: lightskyblue;
+}
+
+.active-model {
+    border: 4px solid #000;
 }

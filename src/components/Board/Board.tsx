@@ -37,24 +37,31 @@ export const BoardRow: React.FC<React.HTMLAttributes<HTMLElement> & BoardRowProp
 
 export const BoardCell: React.FC<React.HTMLAttributes<HTMLElement> & BoardCellProps> = ({model, rowIndex, colIndex, ...props}) => {
   
-  const {positions, possibleMoves} = useTypedSelector(state => state.board)
+  const {positions, activeModel} = useTypedSelector(state => state.board)
   const actions = useActions()
 
-  const handleMouseOver = () => {
-    if (model) {
-      actions.board.setPossibleMoves(model.possibleMoves(positions))
-    }
-  }
+  const isHighlighted = activeModel && activeModel.possibleMoves.find(pos => pos[0] === rowIndex && pos[1] === colIndex)
+  
 
-  const handleMouseLeave = () => {
-    actions.board.clearPossibleMoves()
+  const handleClcick = () => {
+    if (model && !isHighlighted) {
+      actions.board.setActiveModel({
+        model,
+        possibleMoves: model.possibleMoves(positions)
+      })
+    }
+
+    if (isHighlighted) {
+      actions.board.moveModel([rowIndex, colIndex])
+    }
   }
   
   return (
-    <button onMouseLeave={handleMouseLeave} onMouseOver={handleMouseOver} {...props} className={cn("board-cell", props.className, {
+    <button onClick={handleClcick} {...props} className={cn("board-cell", props.className, {
       "black-model": model && model.type === "white",
       "white-model": model && model.type === "black",
-      "possible-move": possibleMoves.find(pos => pos[0] === rowIndex && pos[1] === colIndex)
+      "possible-move": isHighlighted,
+      "active-model": model && (activeModel && activeModel.model === model)
     })}>
       {model && model.getModelName()}
     </button>

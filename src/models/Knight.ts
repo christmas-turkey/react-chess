@@ -20,6 +20,27 @@ export default class Knight implements ModelType {
     }
     
     possibleMoves(positions: BoardPositionsType): [number, number][] {
-        return [[0, 2]]
+        const possibleMoves: [number, number][] = []
+        const [currentPosX, currentPosY] = this.currentPosition
+
+        const checkPosition = (x: number, y: number) => {      
+            if (positions[x]) {
+                const next = positions[x][y]
+                if (next === null || (next && next.type !== this.type)) {
+                    possibleMoves.push([x, y])
+                }
+            }
+        }
+
+        checkPosition(currentPosX-2, currentPosY-1)
+        checkPosition(currentPosX-2, currentPosY+1)
+        checkPosition(currentPosX-1, currentPosY-2)
+        checkPosition(currentPosX-1, currentPosY+2)
+        checkPosition(currentPosX+2, currentPosY-1)
+        checkPosition(currentPosX+2, currentPosY+1)
+        checkPosition(currentPosX+1, currentPosY-2)
+        checkPosition(currentPosX+1, currentPosY+2)
+        
+        return possibleMoves
     }
 }

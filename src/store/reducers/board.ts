@@ -1,5 +1,4 @@
-import { ModelType } from './../../types/model';
-import { BoardAction } from './../actions/board';
+import { BoardAction, SetActiveModelPayload } from './../actions/board';
 import { BoardPositionsType } from "../../types/board"
 import { BoardActionTypes } from '../action-types/board';
 import Pawn from '../../models/Pawn';
@@ -11,7 +10,7 @@ import King from '../../models/King';
 
 interface BoardStateType {
     positions: BoardPositionsType,
-    possibleMoves: [number, number][]
+    activeModel: SetActiveModelPayload | null
 }
 
 const BOARD_SIZE = 8
@@ -31,7 +30,7 @@ const createPositions = (): BoardPositionsType => {
 
 const initialState: BoardStateType = {
     positions: createPositions(),
-    possibleMoves: []
+    activeModel: null
 }
 
 export default (state: BoardStateType = initialState, action: BoardAction): BoardStateType => {
@@ -47,13 +46,32 @@ export default (state: BoardStateType = initialState, action: BoardAction): Boar
                 })
             })
 
-            return {positions: newPositions, possibleMoves: []}
+            return {...state, positions: newPositions}
         
-        case BoardActionTypes.SET_POSSIBLE_MOVES:
-            return {...state, possibleMoves: action.payload}
+        case BoardActionTypes.SET_ACTIVE_MODEL:
+            return {...state, activeModel: action.payload}
         
-        case BoardActionTypes.CLEAR_POSSIBLE_MOVES:
-            return {...state, possibleMoves: []}
+        case BoardActionTypes.REMOVE_ACTIVE_MODEL:
+            return {...state, activeModel: null}
+        
+        case BoardActionTypes.MOVE_MODEL:
+            const [posX, posY] = action.payload
+
+            if (state.activeModel) {
+                const [prevPosX, prevPosY] = state.activeModel.model.currentPosition
+
+                if (state.activeModel.model instanceof Pawn && (posX === 7 || posX === 0)) {
+                    state.positions[posX][posY] = new Queen(state.activeModel.model.type, [posX, posY])
+                } else {
+                    state.positions[posX][posY] = state.activeModel.model
+                } 
+
+                state.positions[prevPosX][prevPosY] = null
+
+                state.activeModel.model.currentPosition = [posX, posY]
+            }
+
+            return {positions: state.positions, activeModel: null}
             
         default:
             return state

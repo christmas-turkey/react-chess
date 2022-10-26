@@ -1,5 +1,5 @@
 import { BoardActionTypes } from '../action-types/board';
-import { ResetBoardAction, SetPossibleMovesAction, ClearPossibleMovesAction } from './../actions/board';
+import { ResetBoardAction, SetActiveModelAction, RemoveActiveModelAction, SetActiveModelPayload, MoveModelAction } from './../actions/board';
 
 
 export const resetBoard = (): ResetBoardAction => {
@@ -8,15 +8,22 @@ export const resetBoard = (): ResetBoardAction => {
     }
 }
 
-export const setPossibleMoves = (payload: [number, number][]): SetPossibleMovesAction => {
+export const moveModel = (payload: [number, number]): MoveModelAction => {
     return {
-        type: BoardActionTypes.SET_POSSIBLE_MOVES,
+        type: BoardActionTypes.MOVE_MODEL,
         payload
     }
 }
 
-export const clearPossibleMoves = (): ClearPossibleMovesAction => {
+export const setActiveModel = (payload: SetActiveModelPayload): SetActiveModelAction => {
     return {
-        type: BoardActionTypes.CLEAR_POSSIBLE_MOVES
+        type: BoardActionTypes.SET_ACTIVE_MODEL,
+        payload
+    }
+}
+
+export const removeActiveModel = (): RemoveActiveModelAction => {
+    return {
+        type: BoardActionTypes.REMOVE_ACTIVE_MODEL
     }
 }
