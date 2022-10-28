@@ -97,25 +97,29 @@ export const Board: React.FC<React.HTMLAttributes<HTMLElement>> = (props) => {
 
   return (
     <div {...props} ref={boardRef} className={cn("board", props.className)}>
-      <div className='active-player'>Ходять {activePlayer === "white" ? "білі" : "чорні"}</div>
-      {check && (
-        <div className='check'>Шах для {check.for === "white" ? "білих" : "чорних"}</div>
-      )}
-      {mate && (
-        <div className='mate'>Мат для {mate.for === "white" ? "білих" : "чорних"}</div>
-      )}
+      <div className='center'>
+        <div className='active-player'>Ходять {activePlayer === "white" ? "білі" : "чорні"}</div>
+        {check && (
+          <div className='check'>Шах для {check.for === "white" ? "білих" : "чорних"}</div>
+        )}
+        {mate && (
+          <div className='mate'>Мат для {mate.for === "white" ? "білих" : "чорних"}</div>
+        )}
+      </div>
       <div className='board-row'>
         {Array.from("abcdefgh").map((value) => <div className='board-coordinate'>{value}</div>)}
       </div>
       {positions.map((row, index) => {
         return <BoardRow row={row} rowIndex={index} />
       })}
-      {mate && (
-        <button onClick={actions.board.resetBoard} className='reset-game'>Почати заново</button>
-      )}
-      {!mate && (
-        <button className='automove' onClick={handleAutoMove}>{isAutomoving ? "Виключити автоходи" : "Включити автоходи"}</button>
-      )}
+      <div className='center'>
+        {mate && (
+          <button onClick={actions.board.resetBoard} className='reset-game'>Почати заново</button>
+        )}
+        {!mate && (
+          <button className='automove' onClick={handleAutoMove}>{isAutomoving ? "Виключити автоходи" : "Включити автоходи"}</button>
+        )}
+      </div>
     </div>
   )
 }
