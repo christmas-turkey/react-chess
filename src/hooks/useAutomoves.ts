@@ -53,7 +53,11 @@ export const useAutomoves = () => {
 
     useEffect(() => {
         if (boardRef.current) {
-            boardRef.current.classList.toggle("board-blocked") 
+            if (isAutomoving) {
+                boardRef.current.classList.add("board-blocked")
+            } else {
+                boardRef.current.classList.remove("board-blocked")
+            }
         }
     }, [isAutomoving, boardRef])
 
