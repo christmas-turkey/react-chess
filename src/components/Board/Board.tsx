@@ -7,6 +7,10 @@ import { BoardRowType } from '../../types/board'
 import Bishop from '../../models/Bishop'
 import { useActions } from '../../hooks/useActions'
 import { ModelType } from '../../types/model'
+import getKing from '../../utils/getKing'
+import isCheck from '../../utils/isCheck'
+import isMate from '../../utils/isMate'
+import getModels from '../../utils/getModels'
 
 
 interface BoardRowProps {
@@ -37,17 +41,16 @@ export const BoardRow: React.FC<React.HTMLAttributes<HTMLElement> & BoardRowProp
 
 export const BoardCell: React.FC<React.HTMLAttributes<HTMLElement> & BoardCellProps> = ({model, rowIndex, colIndex, ...props}) => {
   
-  const {positions, activeModel} = useTypedSelector(state => state.board)
+  const {positions, activeModel, activePlayer} = useTypedSelector(state => state.board)
   const actions = useActions()
 
   const isHighlighted = activeModel && activeModel.possibleMoves.find(pos => pos[0] === rowIndex && pos[1] === colIndex)
-  
 
   const handleClcick = () => {
     if (model && !isHighlighted) {
       actions.board.setActiveModel({
         model,
-        possibleMoves: model.possibleMoves(positions)
+        possibleMoves: model.filterPossibleMoves(model.possibleMoves(positions), positions)
       })
     }
 
@@ -58,10 +61,11 @@ export const BoardCell: React.FC<React.HTMLAttributes<HTMLElement> & BoardCellPr
   
   return (
     <button onClick={handleClcick} {...props} className={cn("board-cell", props.className, {
-      "black-model": model && model.type === "white",
-      "white-model": model && model.type === "black",
+      "black-model": model && model.type === "black",
+      "white-model": model && model.type === "white",
       "possible-move": isHighlighted,
-      "active-model": model && (activeModel && activeModel.model === model)
+      "active-model": model && (activeModel && activeModel.model === model),
+      "model-blocked": model && (model.type !== activePlayer && !isHighlighted)
     })}>
       {model && model.getModelName()}
     </button>
@@ -70,7 +74,7 @@ export const BoardCell: React.FC<React.HTMLAttributes<HTMLElement> & BoardCellPr
 
 export const Board: React.FC<React.HTMLAttributes<HTMLElement>> = (props) => {
 
-  const {positions} = useTypedSelector(state => state.board)
+  const {positions, activePlayer, check, mate} = useTypedSelector(state => state.board)
   const actions = useActions()
 
   useEffect(() => {
@@ -79,12 +83,22 @@ export const Board: React.FC<React.HTMLAttributes<HTMLElement>> = (props) => {
 
   return (
     <div {...props} className={cn("board", props.className)}>
+      <div className='active-player'>Ходять {activePlayer === "white" ? "білі" : "чорні"}</div>
+      {check && (
+        <div className='check'>Шах для {check.for === "white" ? "білих" : "чорних"}</div>
+      )}
+      {mate && (
+        <div className='mate'>Мат для {mate.for === "white" ? "білих" : "чорних"}</div>
+      )}
       <div className='board-row'>
         {Array.from("abcdefgh").map((value) => <div className='board-coordinate'>{value}</div>)}
       </div>
       {positions.map((row, index) => {
         return <BoardRow row={row} rowIndex={index} />
       })}
+      {mate && (
+        <button onClick={actions.board.resetBoard} className='reset-game'>Почати заново</button>
+      )}
     </div>
   )
 }

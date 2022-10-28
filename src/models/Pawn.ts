@@ -1,5 +1,10 @@
 import { BoardPositionsType } from './../types/board';
 import { ModelType } from '../types/model';
+import getKing from '../utils/getKing';
+import isCheck from '../utils/isCheck';
+import placeModel from '../utils/placeModel';
+import King from './King';
+import MockModel from './MockModel';
 
 
 export default class Pawn implements ModelType {
@@ -18,6 +23,20 @@ export default class Pawn implements ModelType {
     getInitialPositions(): [number, number][] {
         return new Array(8).fill(0).map((_, index) => [1, index])
     }
+
+    filterPossibleMoves(possibleMoves: [number, number][], positions: BoardPositionsType): [number, number][] {
+        const king = getKing(this.type, positions)
+        const newMoves: [number, number][] = []
+
+        possibleMoves.forEach(possibleMove => {
+            if (!isCheck(king, placeModel(positions, this, possibleMove))) {
+                newMoves.push(possibleMove)
+            }
+        })
+
+        return newMoves
+    }
+
     
     possibleMoves(positions: BoardPositionsType): [number, number][] {
         const possibleMoves: [number, number][] = []
@@ -44,7 +63,7 @@ export default class Pawn implements ModelType {
             }
         }
 
-        if (this.type === "white") {
+        if (this.type === "black") {
             checkPosition(currentPosX+1, currentPosY)
             if (currentPosX === 1 && (positions[currentPosX+1][currentPosY] === null) && (positions[currentPosX+2][currentPosY] === null)) {
                 possibleMoves.push([currentPosX+2, currentPosY])

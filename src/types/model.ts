@@ -5,4 +5,5 @@ export interface ModelType {
     getModelName: () => string,
     getInitialPositions: () => [number, number][]
     possibleMoves: (positions: BoardPositionsType) => [number, number][]
+    filterPossibleMoves: (possibleMoves: [number, number][], positions: BoardPositionsType) => [number, number][]
 }

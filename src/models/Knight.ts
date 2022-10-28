@@ -1,5 +1,9 @@
 import { BoardPositionsType } from './../types/board';
 import { ModelType } from '../types/model';
+import getKing from '../utils/getKing';
+import isCheck from '../utils/isCheck';
+import placeModel from '../utils/placeModel';
+import MockModel from './MockModel';
 
 
 export default class Knight implements ModelType {
@@ -18,6 +22,20 @@ export default class Knight implements ModelType {
     getInitialPositions(): [number, number][] {
         return [[0, 1], [0, 6]]
     }
+    
+    filterPossibleMoves(possibleMoves: [number, number][], positions: BoardPositionsType): [number, number][] {
+        const king = getKing(this.type, positions)
+        const newMoves: [number, number][] = []
+
+        possibleMoves.forEach(possibleMove => {
+            if (!isCheck(king, placeModel(positions, this, possibleMove))) {
+                newMoves.push(possibleMove)
+            }
+        })
+
+        return newMoves
+    }
+
     
     possibleMoves(positions: BoardPositionsType): [number, number][] {
         const possibleMoves: [number, number][] = []

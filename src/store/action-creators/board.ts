@@ -27,3 +27,35 @@ export const removeActiveModel = (): RemoveActiveModelAction => {
         type: BoardActionTypes.REMOVE_ACTIVE_MODEL
     }
 }
+
+export const setCheck = (payload: {for: "white" | "black"}) => {
+    return {
+        type: BoardActionTypes.SET_CHECK,
+        payload
+    }
+}
+
+export const setMate = (payload: {for: "white" | "black"}) => {
+    return {
+        type: BoardActionTypes.SET_CHECK,
+        payload
+    }
+}
+
+export const removeCheck = () => {
+    return {
+        type: BoardActionTypes.REMOVE_CHECK
+    }
+}
+
+export const removeMate = () => {
+    return {
+        type: BoardActionTypes.REMOVE_MATE
+    }
+}
+
+export const changePlayer = () => {
+    return {
+        type: BoardActionTypes.CHENGE_PLAYER
+    }
+}
