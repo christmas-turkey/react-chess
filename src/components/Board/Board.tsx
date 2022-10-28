@@ -11,6 +11,7 @@ import getKing from '../../utils/getKing'
 import isCheck from '../../utils/isCheck'
 import isMate from '../../utils/isMate'
 import getModels from '../../utils/getModels'
+import { useAutomoves } from '../../hooks/useAutomoves'
 
 
 interface BoardRowProps {
@@ -43,6 +44,9 @@ export const BoardCell: React.FC<React.HTMLAttributes<HTMLElement> & BoardCellPr
   
   const {positions, activeModel, activePlayer} = useTypedSelector(state => state.board)
   const actions = useActions()
+
+  const {start, boardRef} = useAutomoves()
+
 
   const isHighlighted = activeModel && activeModel.possibleMoves.find(pos => pos[0] === rowIndex && pos[1] === colIndex)
 
@@ -77,12 +81,22 @@ export const Board: React.FC<React.HTMLAttributes<HTMLElement>> = (props) => {
   const {positions, activePlayer, check, mate} = useTypedSelector(state => state.board)
   const actions = useActions()
 
+  const {start, stop, boardRef, isAutomoving} = useAutomoves()
+
   useEffect(() => {
     actions.board.resetBoard()
   }, [])
 
+  const handleAutoMove = () => {
+    if (isAutomoving) {
+      stop()
+    } else {
+      start()
+    }
+  }
+
   return (
-    <div {...props} className={cn("board", props.className)}>
+    <div {...props} ref={boardRef} className={cn("board", props.className)}>
       <div className='active-player'>Ходять {activePlayer === "white" ? "білі" : "чорні"}</div>
       {check && (
         <div className='check'>Шах для {check.for === "white" ? "білих" : "чорних"}</div>
@@ -98,6 +112,9 @@ export const Board: React.FC<React.HTMLAttributes<HTMLElement>> = (props) => {
       })}
       {mate && (
         <button onClick={actions.board.resetBoard} className='reset-game'>Почати заново</button>
+      )}
+      {!mate && (
+        <button className='automove' onClick={handleAutoMove}>{isAutomoving ? "Виключити автоходи" : "Включити автоходи"}</button>
       )}
     </div>
   )

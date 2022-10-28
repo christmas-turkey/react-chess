@@ -8,6 +8,10 @@
     transform: translate(-50%, -50%);
 }
 
+.board-blocked .board-cell {
+    pointer-events: none;
+}
+
 .board-row {
     display: flex;
     justify-content: flex-end;
@@ -77,10 +81,9 @@
     color: red;
 }
 
-.reset-game {
+.reset-game, .automove {
     margin-top: 10px;
     border-radius: 10px;
-    background-color: royalblue;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -89,4 +92,12 @@
     font-weight: bold;
     border: none;
     cursor: pointer;
+}
+
+.reset-game {
+    background-color: red;
+}
+
+.automove {
+    background-color: royalblue;
 }
