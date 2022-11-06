@@ -3,7 +3,8 @@ import { ModelType } from '../types/model';
 import getKing from '../utils/getKing';
 import isCheck from '../utils/isCheck';
 import placeModel from '../utils/placeModel';
-import MockModel from './MockModel';
+import bKnight from "../assets/b_knight.png"
+import wKnight from "../assets/w_knight.png"
 
 
 export default class Knight implements ModelType {
@@ -15,8 +16,11 @@ export default class Knight implements ModelType {
         this.currentPosition = currentPosition
     }
     
-    getModelName(): string {
-        return "К"
+    getModelImage(): { black: string; white: string; } {
+        return {
+            black: bKnight,
+            white: wKnight
+        }
     }
 
     getInitialPositions(): [number, number][] {

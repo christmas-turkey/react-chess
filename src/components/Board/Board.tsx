@@ -71,7 +71,7 @@ export const BoardCell: React.FC<React.HTMLAttributes<HTMLElement> & BoardCellPr
       "active-model": model && (activeModel && activeModel.model === model),
       "model-blocked": model && (model.type !== activePlayer && !isHighlighted)
     })}>
-      {model && model.getModelName()}
+      <img src={model ? model.getModelImage()[model.type === "white" ? "white" : "black"] : ""} />
     </button>
   )
 }

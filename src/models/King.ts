@@ -3,6 +3,8 @@ import { ModelType } from '../types/model';
 import getKing from '../utils/getKing';
 import isCheck from '../utils/isCheck';
 import placeModel from '../utils/placeModel';
+import bKing from "../assets/b_king.png"
+import wKing from "../assets/w_king.png"
 
 
 export default class King implements ModelType {
@@ -14,8 +16,11 @@ export default class King implements ModelType {
         this.currentPosition = currentPosition
     }
     
-    getModelName(): string {
-        return "Кр"
+    getModelImage(): { black: string; white: string; } {
+        return {
+            black: bKing,
+            white: wKing
+        }
     }
 
     getInitialPositions(): [number, number][] {

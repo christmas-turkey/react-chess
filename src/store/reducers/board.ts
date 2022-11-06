@@ -13,6 +13,7 @@ import getKing from '../../utils/getKing';
 import isCheck from '../../utils/isCheck';
 import getModels from '../../utils/getModels';
 import isMate from '../../utils/isMate';
+import moveSound from "../../assets/move.mp3"
 
 interface BoardStateType {
     positions: BoardPositionsType,
@@ -106,6 +107,8 @@ export default (state: BoardStateType = initialState, action: BoardAction): Boar
 
                 model.currentPosition = [posX, posY]
             }
+
+            new Audio(moveSound).play()
 
             const {white, black} = getModels(state.positions)
 

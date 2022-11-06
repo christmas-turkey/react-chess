@@ -4,7 +4,8 @@ import getKing from '../utils/getKing';
 import isCheck from '../utils/isCheck';
 import placeModel from '../utils/placeModel';
 import King from './King';
-import MockModel from './MockModel';
+import bPawn from "../assets/b_pawn.png"
+import wPawn from "../assets/w_pawn.png"
 
 
 export default class Pawn implements ModelType {
@@ -16,8 +17,11 @@ export default class Pawn implements ModelType {
         this.currentPosition = currentPosition
     }
     
-    getModelName(): string {
-        return "П"
+    getModelImage(): { black: string; white: string; } {
+        return {
+            black: bPawn,
+            white: wPawn
+        }
     }
 
     getInitialPositions(): [number, number][] {

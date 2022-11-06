@@ -3,6 +3,8 @@ import { ModelType } from '../types/model';
 import getKing from '../utils/getKing';
 import isCheck from '../utils/isCheck';
 import placeModel from '../utils/placeModel';
+import bRook from "../assets/b_rook.png"
+import wRook from "../assets/w_rook.png"
 
 
 export default class Rook implements ModelType {
@@ -14,8 +16,11 @@ export default class Rook implements ModelType {
         this.currentPosition = currentPosition
     }
 
-    getModelName(): string {
-        return "Т"
+    getModelImage(): { black: string; white: string; } {
+        return {
+            black: bRook,
+            white: wRook
+        }
     }
 
     getInitialPositions(): [number, number][] {

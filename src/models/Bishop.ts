@@ -4,7 +4,8 @@ import getKing from '../utils/getKing';
 import isCheck from '../utils/isCheck';
 import placeModel from '../utils/placeModel';
 import Pawn from './Pawn';
-import MockModel from './MockModel';
+import bBishop from "../assets/b_bishop.png"
+import wBishop from "../assets/w_bishop.png"
 
 
 export default class Bishop implements ModelType {
@@ -16,8 +17,11 @@ export default class Bishop implements ModelType {
         this.currentPosition = currentPosition
     }
 
-    getModelName(): string {
-        return "С"
+    getModelImage(): { black: string; white: string; } {
+        return {
+            black: bBishop,
+            white: wBishop
+        }
     }
 
     getInitialPositions(): [number, number][] {
