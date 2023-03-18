@@ -46,7 +46,7 @@ export const useAutomoves = () => {
 
     useEffect(() => {
         if (isAutomoving) {
-            const interval = window.setInterval(move, 1000)
+            const interval = window.setInterval(move, 10)
             return () => window.clearInterval(interval)
         }
     }, [activePlayer, positions, isAutomoving])
